@@ -10,10 +10,11 @@
 /*                                                                            */
 /* ************************************************************************** */
 #include "ft_printf.h"
+#include "libft.h"
 
-void	parse_specifier(const char **format, t_format *fmt)
+void	parse_specifier(const char **format, t_fmt *fmt)
 {
-	fmt->specifier = **format;
+	fmt->spec = **format;
 	(*format)++;
 }
 
@@ -24,29 +25,29 @@ int	check_flag(char c)
 	return (0);
 }
 
-int	parse_flags(const char **format, t_format *fmt)
+int parse_flags(const char **format, t_fmt *fmt)
 {
-	while (check_flag(**format))
-	{
-		if (**format == '-')
-			fmt->left_justify = 1;
-		else if (**format == '0')
-			fmt->zero_padding = 1;
-		else if (**format == '#')
-			fmt->length_modifier = 1;
-		else if (**format == ' ')
-			fmt->width = 1;
-		else if (**format == '+')
-			fmt->precision = 1;
-		(*format)++;
-	}
-	return (1);
+    while (check_flag(**format))
+    {
+        if (**format == '-')
+            fmt->left = 1;
+        else if (**format == '0')
+            fmt->zero = 1;
+        else if (**format == '#')
+            fmt->len_mod = 1;
+        else if (**format == ' ')
+            fmt->width = 1;
+        else if (**format == '+')
+            fmt->prec = 1;
+        (*format)++;
+    }
+    return (1);
 }
 
-int	parse_width_precision(const char **format, t_format *fmt)
+int	parse_width_precision(const char **format, t_fmt *fmt)
 {
 	fmt->width = 0;
-	fmt->precision = -1;
+	fmt->prec = -1;
 	if (**format >= '0' && **format <= '9')
 	{
 		fmt->width = ft_atoi(*format);
@@ -56,36 +57,36 @@ int	parse_width_precision(const char **format, t_format *fmt)
 	if (**format == '.')
 	{
 		(*format)++;
-		fmt->precision = ft_atoi(*format);
+		fmt->prec = ft_atoi(*format);
 		while (**format >= '0' && **format <= '9')
 			(*format)++;
 	}
 	return (1);
 }
 
-int	parse_len(const char **format, t_format *fmt)
+int	parse_len(const char **format, t_fmt *fmt)
 {
 	if (**format == 'h' && *(*format + 1) == 'h')
 	{
-		fmt->length_modifier = 1;
+		fmt->len_mod = 1;
 		(*format) += 2;
 	}
 	else if (**format == 'h')
 	{
-		fmt->length_modifier = 2;
+		fmt->len_mod = 2;
 		(*format)++;
 	}
 	else if (**format == 'l' && *(*format + 1) == 'l')
 	{
-		fmt->length_modifier = 3;
+		fmt->len_mod = 3;
 		(*format) += 2;
 	}
 	else if (**format == 'l')
 	{
-		fmt->length_modifier = 4;
+		fmt->len_mod = 4;
 		(*format)++;
 	}
 	else
-		fmt->length_modifier = 0;
+		fmt->len_mod = 0;
 	return (1);
 }

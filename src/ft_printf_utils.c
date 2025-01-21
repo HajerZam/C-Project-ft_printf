@@ -70,5 +70,5 @@ int	ft_puthex(unsigned int n, int upper)
 	if (n >= 16)
 		i += ft_puthex(n / 16, upper);
 	i += ft_puthex_char(n, upper);
-	return (count);
+	return (i);
 }

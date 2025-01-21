@@ -10,6 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 #include "ft_printf.h"
+#include "libft.h"
 
 int	check_conversion(char c)
 {
@@ -22,33 +23,33 @@ int	check_conversion(char c)
 	return (0);
 }
 
-int	handle_conversion(t_format *fmt, va_list args)
+int	handle_conversion(t_fmt *fmt, va_list args)
 {
 	int	i;
 
 	i = 0;
-	if (fmt->specifier == 'd' || fmt->specifier == 'i')
+	if (fmt->spec == 'd' || fmt->spec == 'i')
 		i += ft_putnbr(va_arg(args, int));
-	else if (fmt->specifier == 's')
-		i += ft_putstr(va_arg(args, char *), 1);
-	else if (fmt->specifier == 'c')
+	else if (fmt->spec == 's')
+		i += ft_putstr(va_arg(args, char *));
+	else if (fmt->spec == 'c')
 		i += ft_putchar((char)va_arg(args, int));
-	else if (fmt->specifier == '%')
+	else if (fmt->spec == '%')
 		i += ft_putchar('%');
-	else if (fmt->specifier == 'x')
+	else if (fmt->spec == 'x')
 		i += ft_puthex(va_arg(args, unsigned int), 0);
-	else if (fmt->specifier == 'X')
+	else if (fmt->spec == 'X')
 		i += ft_puthex(va_arg(args, unsigned int), 1);
-	else if (fmt->specifier == 'u')
+	else if (fmt->spec == 'u')
 		i += ft_putunsigned(va_arg(args, unsigned int));
-	else if (fmt->specifier == 'p')
+	else if (fmt->spec == 'p')
 		i += ft_putptr(va_arg(args, void *));
 	return (i);
 }
 
-const char	*parse_handle(const char **fmt, t_format *f, va_list a, int *i)
+const char	*parse_handle(const char **fmt, t_fmt *f, va_list a, int *i)
 {
-	ft_memset(f, 0, sizeof(t_format));
+	ft_memset(f, 0, sizeof(t_fmt));
 	parse_flags(fmt, f);
 	parse_width_precision(fmt, f);
 	parse_len(fmt, f);
@@ -61,7 +62,7 @@ int	ft_printf(const char *format, ...)
 {
 	va_list		args;
 	int			i;
-	t_format	fmt;
+	t_fmt	fmt;
 
 	i = 0;
 	va_start(args, format);

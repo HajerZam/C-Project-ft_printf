@@ -11,80 +11,64 @@
 /* ************************************************************************** */
 #include "ft_printf.h"
 
-int	check_conversion(char c)
+int	ft_putchar(char c)
 {
-	if (c == 'c' || c == 's' || c == 'p' || c == 'd' || c == 'i')
-		return (1);
-	if (c == 'u' || c == 'x' || c == 'X' || c == 'n' || c == 'f')
-		return (1); 
-	if (c == 'e' || c == 'g' || c == 'a' || c == '%')
-		return (1);
-	return (0);
-}
-int	check_flag(char c)
-{
-	if (c == '-' || c == '0' || c == '#' || c == ' ' || c == '+')
-		return (1);
-	return (0);
+	write(1, &c, 1);
+	return (1);
 }
 
-int parse_flags(const char **format, int *left_justify, int *zero_padding)
+int	ft_putstr(char *str)
 {
-	int flag_count = 0;
+	int	i;
 
-	while (**format == '-' || **format == '0')
+	i = 0;
+	while (*str)
 	{
-		if (**format == '-')
-			*left_justify = 1;
-		else if (**format == '0')
-			*zero_padding = 1;
-		(*format)++;
-		flag_count++;
+		write(1, str, 1);
+		str++;
+		i++;
 	}
-	return (flag_count);
-}
-int parse_width_precision(const char **format, int *width, int *precision)
-{
-    *width = 0;
-    *precision = -1;
-
-    if (**format >= '0' && **format <= '9')
-    {
-        *width = ft_atoi(*format);
-        while (**format >= '0' && **format <= '9')
-            (*format)++;
-    }
-    if (**format == '.')
-    {
-        (*format)++;
-        *precision = ft_atoi(*format);
-        while (**format >= '0' && **format <= '9')
-            (*format)++;
-    }
-    return (1);
+	return (i);
 }
 
-int parse_length(const char **format)
+int	ft_putnbr(int n)
 {
-	if (**format == 'h' && *(*format + 1) == 'h')
+	int	i;
+
+	i = 0;
+	if (n == -2147483648)
+		return (ft_putstr("-2147483648"));
+	if (n < 0)
 	{
-		(*format) += 2;
-		return (1);
+		i += ft_putchar('-');
+		n = -n;
 	}
-	else if (**format == 'h')
+	if (n >= 10)
+		i += ft_putnbr(n / 10);
+	i += ft_putchar((n % 10) + '0');
+	return (i);
+}
+
+static int	ft_puthex_char(unsigned int n, int upper)
+{
+	if (n % 16 > 9)
 	{
-		(*format)++;
-		return (2);
+		if (upper)
+			return (ft_putchar((n % 16) - 10 + 'A'));
+		else
+			return (ft_putchar((n % 16) - 10 + 'a'));
 	}
-	else if (**format == 'l' && *(*format + 1) == 'l')
-	{
-		(*format) += 2;
-		return (3);
-	}
-	else if (**format == 'l')
-	{
-		(*format)++;
-		return (4);
-	}
-	return (0);
+	else
+		return (ft_putchar((n % 16) + '0'));
+}
+
+int	ft_puthex(unsigned int n, int upper)
+{
+	int	i;
+
+	i = 0;
+	if (n >= 16)
+		i += ft_puthex(n / 16, upper);
+	i += ft_puthex_char(n, upper);
+	return (count);
 }

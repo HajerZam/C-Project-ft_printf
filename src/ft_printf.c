@@ -62,7 +62,7 @@ int	ft_printf(const char *format, ...)
 {
 	va_list		args;
 	int			i;
-	t_fmt	fmt;
+	t_fmt		fmt;
 
 	i = 0;
 	va_start(args, format);

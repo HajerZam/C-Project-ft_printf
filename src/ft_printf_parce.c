@@ -25,23 +25,23 @@ int	check_flag(char c)
 	return (0);
 }
 
-int parse_flags(const char **format, t_fmt *fmt)
+int	parse_flags(const char **format, t_fmt *fmt)
 {
-    while (check_flag(**format))
-    {
-        if (**format == '-')
-            fmt->left = 1;
-        else if (**format == '0')
-            fmt->zero = 1;
-        else if (**format == '#')
-            fmt->len_mod = 1;
-        else if (**format == ' ')
-            fmt->width = 1;
-        else if (**format == '+')
-            fmt->prec = 1;
-        (*format)++;
-    }
-    return (1);
+	while (check_flag(**format))
+	{
+		if (**format == '-')
+			fmt->left = 1;
+		else if (**format == '0')
+			fmt->zero = 1;
+		else if (**format == '#')
+			fmt->len_mod = 1;
+		else if (**format == ' ')
+			fmt->width = 1;
+		else if (**format == '+')
+			fmt->prec = 1;
+		(*format)++;
+	}
+	return (1);
 }
 
 int	parse_width_precision(const char **format, t_fmt *fmt)

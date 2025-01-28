@@ -6,9 +6,10 @@
 /*   By: halzamma <halzamma@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/11 14:31:07 by halzamma          #+#    #+#             */
-/*   Updated: 2025/01/11 14:31:07 by halzamma         ###   ########.fr       */
+/*   Updated: 2025/01/28 13:50:13 by halzamma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 #include "ft_printf.h"
 #include "libft.h"
 
@@ -65,6 +66,8 @@ int	ft_printf(const char *format, ...)
 	t_fmt		fmt;
 
 	i = 0;
+	if (!format)
+		return (0);
 	va_start(args, format);
 	while (*format)
 	{

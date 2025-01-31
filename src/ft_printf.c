@@ -24,27 +24,38 @@ int	check_conversion(char c)
 	return (0);
 }
 
-int	handle_conversion(t_fmt *fmt, va_list args)
+int	handle_conversion(t_fmt *fmt, va_list *args)
 {
 	int	i;
 
 	i = 0;
 	if (fmt->spec == 'd' || fmt->spec == 'i')
-		i += ft_putnbr(va_arg(args, int));
+		i += ft_putnbr(va_arg(*args, int));
 	else if (fmt->spec == 's')
-		i += ft_putstr(va_arg(args, char *));
+	{
+		char *str = va_arg(*args, char *);
+		if (!str)
+			str = "(null)";
+		i += ft_putstr(str);
+	}
 	else if (fmt->spec == 'c')
-		i += ft_putchar((char)va_arg(args, int));
+		i += ft_putchar((char)va_arg(*args, int));
 	else if (fmt->spec == '%')
 		i += ft_putchar('%');
 	else if (fmt->spec == 'x')
-		i += ft_puthex(va_arg(args, unsigned int), 0);
+		i += ft_puthex(va_arg(*args, unsigned int), 0);
 	else if (fmt->spec == 'X')
-		i += ft_puthex(va_arg(args, unsigned int), 1);
+		i += ft_puthex(va_arg(*args, unsigned int), 1);
 	else if (fmt->spec == 'u')
-		i += ft_putunsigned(va_arg(args, unsigned int));
+		i += ft_putunsigned(va_arg(*args, unsigned int));
 	else if (fmt->spec == 'p')
-		i += ft_putptr(va_arg(args, void *));
+	{
+		void *ptr = va_arg(*args, void *);
+		if (!ptr)
+			i += ft_putstr("(nil)");
+		else
+			i += ft_putptr(ptr);
+	}
 	return (i);
 }
 

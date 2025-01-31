@@ -6,7 +6,7 @@
 /*   By: halzamma <halzamma@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/11 14:31:07 by halzamma          #+#    #+#             */
-/*   Updated: 2025/01/28 13:50:13 by halzamma         ###   ########.fr       */
+/*   Updated: 2025/01/31 13:21:41 by halzamma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,14 +48,14 @@ int	handle_conversion(t_fmt *fmt, va_list args)
 	return (i);
 }
 
-const char	*parse_handle(const char **fmt, t_fmt *f, va_list a, int *i)
+const char	*parse_handle(const char **fmt, t_fmt *f, va_list *a, int *i)
 {
 	ft_memset(f, 0, sizeof(t_fmt));
 	parse_flags(fmt, f);
 	parse_width_precision(fmt, f);
 	parse_len(fmt, f);
 	parse_specifier(fmt, f);
-	*i += handle_conversion(f, a);
+	*i += handle_conversion(f, *a);
 	return (*fmt);
 }
 
@@ -65,15 +65,16 @@ int	ft_printf(const char *format, ...)
 	int			i;
 	t_fmt		fmt;
 
-	i = 0;
 	if (!format)
 		return (0);
 	va_start(args, format);
+	i = 0;
 	while (*format)
 	{
 		if (*format == '%' && *(format + 1))
 		{
-			format = parse_handle(&format, &fmt, args, &i);
+			format++;
+			format = parse_handle(&format, &fmt, &args, &i);
 		}
 		else
 			i += ft_putchar(*format++);

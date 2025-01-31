@@ -10,6 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 #include "ft_printf.h"
+#include "libft.h"
 
 int	ft_putchar(char c)
 {
@@ -19,16 +20,15 @@ int	ft_putchar(char c)
 
 int	ft_putstr(char *str)
 {
-	int	i;
+	int	len;
 
-	i = 0;
-	while (*str)
+	len = 0;
+	while (str[len])
 	{
-		write(1, str, 1);
-		str++;
-		i++;
+		ft_putchar(str[len]);
+		len++;
 	}
-	return (i);
+	return (len);
 }
 
 int	ft_putnbr(int n)

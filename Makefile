@@ -24,6 +24,10 @@ $(NAME): $(OBJ) $(LIBFT)
 %.o: %.c $(INCLUDE_DIR)/ft_printf.h $(INCLUDE_DIR)/libft.h
 	$(CC) $(CFLAGS) -I$(INCLUDE_DIR) -c $< -o $@
 
+test: all main.c
+	$(CC) $(CFLAGS) -I$(INCLUDE_DIR) -o test main.c $(SRC) $(LIBFT)
+	./test
+
 clean:
 	$(MAKE) -C $(LIBFT_DIR) clean
 	rm -f $(OBJ)

@@ -6,16 +6,21 @@
 /*   By: halzamma <halzamma@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 13:34:03 by halzamma          #+#    #+#             */
-/*   Updated: 2025/01/17 13:34:03 by halzamma         ###   ########.fr       */
+/*   Updated: 2025/01/28 14:32:45 by halzamma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 #include "ft_printf.h"
 #include "libft.h"
+#include <stdio.h>
 
 void	parse_specifier(const char **format, t_fmt *fmt)
 {
 	fmt->spec = **format;
-	(*format)++;
+	if (check_conversion(fmt->spec))
+		(*format)++;
+	else
+		fmt->spec = '\0';
 }
 
 int	check_flag(char c)

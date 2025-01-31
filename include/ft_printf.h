@@ -6,7 +6,7 @@
 /*   By: halzamma <halzamma@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 12:18:06 by halzamma          #+#    #+#             */
-/*   Updated: 2025/01/28 13:55:24 by halzamma         ###   ########.fr       */
+/*   Updated: 2025/01/31 13:21:25 by halzamma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,9 +28,9 @@ typedef struct s_fmt
 }	t_fmt;
 
 int			ft_printf(const char *fmt, ...);
-const char	*parse_handle(const char **fmt, t_fmt *f, va_list a, int *i);
+const char	*parse_handle(const char **fmt, t_fmt *f, va_list *a, int *i);
 void		parse_specifier(const char **fmt, t_fmt *f);
-int			handle_conversion(t_fmt *fmt, va_list args);
+int		handle_conversion(t_fmt *fmt, va_list args);
 int			check_conversion(char c);
 int			check_flag(char c);
 int			parse_flags(const char **format, t_fmt *fmt);
@@ -42,5 +42,7 @@ int			ft_putnbr(int n);
 int			ft_puthex(unsigned int n, int upper);
 int			ft_putunsigned(unsigned int n);
 int			ft_putptr(void *ptr);
+int			ft_count_digits_base(unsigned long n, int base);
+char		*ft_itoa_base(unsigned long n, char *base);
 
 #endif

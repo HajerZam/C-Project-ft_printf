@@ -5,70 +5,46 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: halzamma <halzamma@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/16 12:22:27 by halzamma          #+#    #+#             */
-/*   Updated: 2025/01/16 12:22:27 by halzamma         ###   ########.fr       */
+/*   Created: 2025/02/03 11:29:35 by halzamma          #+#    #+#             */
+/*   Updated: 2025/02/03 11:29:35 by halzamma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "ft_printf.h"
-#include "libft.h"
 
-int	ft_putchar(char c)
+void	ft_putchar(char c, int *count)
 {
 	write(1, &c, 1);
-	return (1);
+	(*count)++;
 }
 
-int	ft_putstr(char *str)
+void	ft_putstr(char *str, int *count)
 {
-	int	len;
-
-	len = 0;
-	while (str[len])
-	{
-		ft_putchar(str[len]);
-		len++;
-	}
-	return (len);
+	if (!str)
+		str = "(null)";
+	while (*str)
+		ft_putchar(*str++, count);
 }
 
-int	ft_putnbr(int n)
+void	ft_putnbr_signed(int n, int *count)
 {
-	int	i;
-
-	i = 0;
-	if (n == -2147483648)
-		return (ft_putstr("-2147483648"));
-	if (n < 0)
-	{
-		i += ft_putchar('-');
-		n = -n;
-	}
-	if (n >= 10)
-		i += ft_putnbr(n / 10);
-	i += ft_putchar((n % 10) + '0');
-	return (i);
+    if (n == -2147483648)
+    {
+        ft_putstr("-2147483648", count);
+        return;
+    }
+    if (n < 0)
+    {
+        ft_putchar('-', count);
+        n = -n;
+    }
+    if (n >= 10)
+        ft_putnbr_signed(n / 10, count);
+    ft_putchar((n % 10) + '0', count);
 }
 
-static int	ft_puthex_char(unsigned int n, int upper)
+void	ft_putnbr_unsigned(unsigned int n, int base, char *digits, int *count)
 {
-	if (n % 16 > 9)
-	{
-		if (upper)
-			return (ft_putchar((n % 16) - 10 + 'A'));
-		else
-			return (ft_putchar((n % 16) - 10 + 'a'));
-	}
-	else
-		return (ft_putchar((n % 16) + '0'));
-}
-
-int	ft_puthex(unsigned int n, int upper)
-{
-	int	i;
-
-	i = 0;
-	if (n >= 16)
-		i += ft_puthex(n / 16, upper);
-	i += ft_puthex_char(n, upper);
-	return (i);
+    if (n >= (unsigned int)base)
+        ft_putnbr_unsigned(n / base, base, digits, count);
+    ft_putchar(digits[n % base], count);
 }

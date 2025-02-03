@@ -6,90 +6,62 @@
 /*   By: halzamma <halzamma@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/11 14:31:07 by halzamma          #+#    #+#             */
-/*   Updated: 2025/01/31 13:21:41 by halzamma         ###   ########.fr       */
+/*   Updated: 2025/02/03 20:58:10 by halzamma         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
-#include "libft.h"
+#include <stdio.h>
 
-int	check_conversion(char c)
+void	ft_print_ptr(unsigned long ptr, int *count)
 {
-	if (c == 'c' || c == 's' || c == 'p' || c == 'd' || c == 'i')
-		return (1);
-	if (c == 'u' || c == 'x' || c == 'X' || c == 'n' || c == 'f')
-		return (1);
-	if (c == 'e' || c == 'g' || c == 'a' || c == '%')
-		return (1);
-	return (0);
+    if (ptr == 0)
+    {
+        ft_putstr("(nil)", count);
+        return;
+    }
+    ft_putstr("0x", count);
+    ft_putnbr_unsigned(ptr, 16, "0123456789abcdef", count);
 }
 
-int	handle_conversion(t_fmt *fmt, va_list *args)
+void	ft_conversion(char c, va_list args, int *count)
 {
-	int	i;
-
-	i = 0;
-	if (fmt->spec == 'd' || fmt->spec == 'i')
-		i += ft_putnbr(va_arg(*args, int));
-	else if (fmt->spec == 's')
-	{
-		char *str = va_arg(*args, char *);
-		if (!str)
-			str = "(null)";
-		i += ft_putstr(str);
-	}
-	else if (fmt->spec == 'c')
-		i += ft_putchar((char)va_arg(*args, int));
-	else if (fmt->spec == '%')
-		i += ft_putchar('%');
-	else if (fmt->spec == 'x')
-		i += ft_puthex(va_arg(*args, unsigned int), 0);
-	else if (fmt->spec == 'X')
-		i += ft_puthex(va_arg(*args, unsigned int), 1);
-	else if (fmt->spec == 'u')
-		i += ft_putunsigned(va_arg(*args, unsigned int));
-	else if (fmt->spec == 'p')
-	{
-		void *ptr = va_arg(*args, void *);
-		if (!ptr)
-			i += ft_putstr("(nil)");
-		else
-			i += ft_putptr(ptr);
-	}
-	return (i);
-}
-
-const char	*parse_handle(const char **fmt, t_fmt *f, va_list *a, int *i)
-{
-	ft_memset(f, 0, sizeof(t_fmt));
-	parse_flags(fmt, f);
-	parse_width_precision(fmt, f);
-	parse_len(fmt, f);
-	parse_specifier(fmt, f);
-	*i += handle_conversion(f, *a);
-	return (*fmt);
+    if (c == 'c')
+        ft_putchar(va_arg(args, int), count);
+    else if (c == 's')
+        ft_putstr(va_arg(args, char *), count);
+    else if (c == 'p')
+        ft_print_ptr(va_arg(args, unsigned long), count);
+    else if (c == 'd' || c == 'i')
+        ft_putnbr_signed(va_arg(args, int), count);
+    else if (c == 'u')
+        ft_putnbr_unsigned(va_arg(args, unsigned int), 10, "0123456789", count);
+    else if (c == 'x')
+        ft_putnbr_unsigned(va_arg(args, unsigned int), 16, "0123456789abcdef", count);
+    else if (c == 'X')
+        ft_putnbr_unsigned(va_arg(args, unsigned int), 16, "0123456789ABCDEF", count);
+    else if (c == '%')
+        ft_putchar('%', count);
 }
 
 int	ft_printf(const char *format, ...)
 {
-	va_list		args;
-	int			i;
-	t_fmt		fmt;
+    va_list	args;
+    int		count;
 
-	if (!format)
-		return (0);
-	va_start(args, format);
-	i = 0;
-	while (*format)
-	{
-		if (*format == '%' && *(format + 1))
-		{
-			format++;
-			format = parse_handle(&format, &fmt, &args, &i);
-		}
-		else
-			i += ft_putchar(*format++);
-	}
-	va_end(args);
-	return (i);
+    count = 0;
+    va_start(args, format);
+    while (*format)
+    {
+        if (*format == '%' && *(format + 1))
+        {
+            format++;
+            ft_conversion(*format, args, &count);
+        }
+        else
+            ft_putchar(*format, &count);
+        format++;
+    }
+    va_end(args);
+    return (count);
 }

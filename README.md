@@ -78,11 +78,6 @@ Recreate the core functionality of the C standard `printf()` function in your ow
 valgrind --leak-check=full ./your_program
 ```
 ---
-Language     Files     Lines    Code   Comments   Blanks
-----------------------------------------------------------
-C            XX        XXXX     XXXX     XXX       XXX
-Header       XX        XXXX     XXXX     XXX       XXX
----
 
 🧵 Final Thoughts
 “Coding is 10% writing code and 90% staring at the screen wondering why it doesn’t work.”
